@@ -2,10 +2,13 @@ import json
 from openai import OpenAI
 import numpy as np
 from numpy.linalg import norm
+import os
+from dotenv import load_dotenv
+load_dotenv()
 with open('data.json', 'r') as f:
     data = json.load(f)
 
-apiKey = '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'
+apiKey = os.getenv('API_KEY')
 client = OpenAI(api_key=apiKey)
 def answerQuestion(question):
     questionQuery = client.embeddings.create(
@@ -54,9 +57,3 @@ def answerQuestion(question):
         return chatMessage
     else:
         return None
-
-
-output = answerQuestion("What are some relevant experiences you've had?")
-for chunk in output:
-    if chunk.choices[0].delta.content is not None:
-        print(chunk.choices[0].delta.content, end="")
